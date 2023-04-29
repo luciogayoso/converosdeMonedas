@@ -1,17 +1,11 @@
 package menu;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.json.stream.JsonParser;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import com.google.gson.Gson;
 
-import busquedaMoneda.BusquedaMonedas;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -83,6 +77,22 @@ try {
 		}
 	}else {
 		System.out.println(eleccion);
+		double temperatura = tomarTemperatura();
+		String temperaturaConvercion  =(String) elegirTipoTemperatura();
+		switch (temperaturaConvercion) {
+		case "Grados Fahrenheit": {
+			double grados = (temperatura * 1.8)+32;
+			mostrarResultadoTemperatura(grados, "Fahreheit");
+			break;
+		}
+        case "Grados Kelvin": {
+			double grados = temperatura +273.15;
+			mostrarResultadoTemperatura(grados,"Kelvin");
+			break;
+		}
+			default:
+			throw new IllegalArgumentException("Unexpected value: " + temperaturaConvercion);
+		}
 	}
 	}catch (Exception e) {
 		// TODO: handle exception
@@ -121,9 +131,30 @@ try {
 		return seleccion;
 	}
     
+    
     public static void entraDelValorIncorrecto() {
     	JOptionPane.showMessageDialog(null, "El valor es incorrecto");
-    }			
+    }	
+    
+    public static double tomarTemperatura() {
+		Double monto =Double.parseDouble(JOptionPane.showInputDialog(null, "Ingresa la Temperatura en centigrados a convertir"));
+		mostrarResultadoConvertido(monto);
+		return monto;
+	}
+    
+    public static Object elegirTipoTemperatura () {
+		JDialog.setDefaultLookAndFeelDecorated(true);
+		Object [] SelectionValues = { "Grados Fahrenheit" , "Grados Kelvin" };
+	    String initialSelection = "Elegir Moneda" ;
+	    Object seleccion = JOptionPane.showInputDialog(null, "¿Qué tipo de temperatura quiere convertir?" ,
+	         "Elige uno" , JOptionPane.QUESTION_MESSAGE, null, SelectionValues, initialSelection);
+		return seleccion;
+	}
+    
+    public static void mostrarResultadoTemperatura(double temperatura, String tipoGrado) {
+    	JOptionPane.showMessageDialog(null, "Su conversion es de "+ temperatura + " grados");
+    }
+    
 }    
 	
 
